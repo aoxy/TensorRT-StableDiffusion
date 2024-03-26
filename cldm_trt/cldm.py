@@ -313,6 +313,7 @@ class ControlLDM(LatentDiffusion):
         self.only_mid_control = only_mid_control
         self.control_scales = [1.0] * 13
         self.controlnet_trt = False
+        import pdb; pdb.set_trace()
         controlnet_engine_path = "./engine/ControlNet.engine"
         if not os.path.exists(controlnet_engine_path):
             self.controlnet_trt = False

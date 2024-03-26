@@ -20,7 +20,10 @@ class DDIMSampler(object):
         self.controlnet_trt = True
         controlnet_engine_path = "./engine/ControlNet.plan"
         if not os.path.exists(controlnet_engine_path):
-            self.controlnet_trt = False
+            controlnet_engine_path = controlnet_engine_path.replace(".plan", "_fp16.plan")
+            if not os.path.exists(controlnet_engine_path):
+                self.controlnet_trt = False
+
         if self.controlnet_trt:
             self.controlnet_engine = Engine(controlnet_engine_path)
             self.controlnet_engine.load()
@@ -33,7 +36,9 @@ class DDIMSampler(object):
         self.controlunet_trt = True
         unet_engine_path = "./engine/ControlledUnet.plan"
         if not os.path.exists(unet_engine_path):
-            self.controlunet_trt = False
+            unet_engine_path = unet_engine_path.replace(".plan", "_fp16.plan")
+            if not os.path.exists(unet_engine_path):
+                self.controlunet_trt = False
         if self.controlunet_trt:
             self.unet_engine = Engine(unet_engine_path)
             self.unet_engine.load()
@@ -461,3 +466,4 @@ class DDIMSampler(object):
                                           unconditional_conditioning=unconditional_conditioning)
             if callback: callback(i)
         return x_dec
+
