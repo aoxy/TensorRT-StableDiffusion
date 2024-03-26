@@ -6,7 +6,7 @@ from tqdm import tqdm
 import os
 from Engine import Engine
 from polygraphy import cuda
-from ldm.modules.diffusionmodules.util import make_ddim_sampling_parameters, make_ddim_timesteps, noise_like, extract_into_tensor
+from ldm_trt.modules.diffusionmodules.util import make_ddim_sampling_parameters, make_ddim_timesteps, noise_like, extract_into_tensor
 
 import time
 

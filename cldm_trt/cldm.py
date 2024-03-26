@@ -3,7 +3,7 @@ import torch
 import torch as th
 import torch.nn as nn
 from Engine import Engine
-from ldm.modules.diffusionmodules.util import (
+from ldm_trt.modules.diffusionmodules.util import (
     conv_nd,
     linear,
     zero_module,
@@ -12,11 +12,11 @@ from ldm.modules.diffusionmodules.util import (
 
 from einops import rearrange, repeat
 from torchvision.utils import make_grid
-from ldm.modules.attention import SpatialTransformer
-from ldm.modules.diffusionmodules.openaimodel import UNetModel, TimestepEmbedSequential, ResBlock, Downsample, AttentionBlock
-from ldm.models.diffusion.ddpm import LatentDiffusion
-from ldm.util import log_txt_as_img, exists, instantiate_from_config
-from ldm.models.diffusion.ddim import DDIMSampler
+from ldm_trt.modules.attention import SpatialTransformer
+from ldm_trt.modules.diffusionmodules.openaimodel import UNetModel, TimestepEmbedSequential, ResBlock, Downsample, AttentionBlock
+from ldm_trt.models.diffusion.ddpm import LatentDiffusion
+from ldm_trt.util import log_txt_as_img, exists, instantiate_from_config
+from ldm_trt.models.diffusion.ddim import DDIMSampler
 import os
 
 class ControlledUnetModel(UNetModel):
@@ -313,7 +313,6 @@ class ControlLDM(LatentDiffusion):
         self.only_mid_control = only_mid_control
         self.control_scales = [1.0] * 13
         self.controlnet_trt = False
-        import pdb; pdb.set_trace()
         controlnet_engine_path = "./engine/ControlNet.engine"
         if not os.path.exists(controlnet_engine_path):
             self.controlnet_trt = False
@@ -482,3 +481,4 @@ class ControlLDM(LatentDiffusion):
             self.control_model = self.control_model.cpu()
             self.first_stage_model = self.first_stage_model.cuda()
             self.cond_stage_model = self.cond_stage_model.cuda()
+

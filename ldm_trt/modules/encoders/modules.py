@@ -5,7 +5,7 @@ from Engine import Engine
 from transformers import T5Tokenizer, T5EncoderModel, CLIPTokenizer, CLIPTextModel
 
 import open_clip
-from ldm.util import default, count_params
+from ldm_trt.util import default, count_params
 import os
 
 class AbstractEncoder(nn.Module):
@@ -96,10 +96,10 @@ class FrozenCLIPEmbedder(AbstractEncoder):
                  freeze=True, layer="last", layer_idx=None):  # clip-vit-base-patch32
         super().__init__()
         assert layer in self.LAYERS
-        # self.tokenizer = CLIPTokenizer.from_pretrained(version)
-        # self.transformer = CLIPTextModel.from_pretrained(version)
-        self.tokenizer = CLIPTokenizer.from_pretrained(version, cache_dir=os.getcwd() + "/models")
-        self.transformer = CLIPTextModel.from_pretrained(version, cache_dir=os.getcwd() + "/models")
+        self.tokenizer = CLIPTokenizer.from_pretrained(version)
+        self.transformer = CLIPTextModel.from_pretrained(version)
+        # self.tokenizer = CLIPTokenizer.from_pretrained(version, cache_dir=os.getcwd() + "/models")
+        # self.transformer = CLIPTextModel.from_pretrained(version, cache_dir=os.getcwd() + "/models")
         self.device = device
         self.max_length = max_length
         if freeze:
@@ -112,7 +112,9 @@ class FrozenCLIPEmbedder(AbstractEncoder):
         self.clip_trt_infer = True
         clip_engine_path = "./engine/CLIP.plan"
         if not os.path.exists(clip_engine_path):
-            self.clip_trt_infer = False
+            clip_engine_path = clip_engine_path.replace(".plan", "_fp16.plan")
+            if not os.path.exists(clip_engine_path):
+                self.clip_trt_infer = False
         if self.clip_trt_infer:
             self.clip_engine = Engine(clip_engine_path)
             self.clip_engine.load()

@@ -98,8 +98,12 @@ class FrozenCLIPEmbedder(AbstractEncoder):
                  freeze=True, layer="last", layer_idx=None):  # clip-vit-base-patch32
         super().__init__()
         assert layer in self.LAYERS
-        self.tokenizer = CLIPTokenizer.from_pretrained(version, cache_dir=os.getcwd() + "/models")
-        self.transformer = CLIPTextModel.from_pretrained(version, cache_dir=os.getcwd() + "/models")
+        # import pdb;pdb.set_trace()
+        # self.tokenizer = CLIPTokenizer.from_pretrained(version, cache_dir=os.getcwd() + "/models")
+        # self.transformer = CLIPTextModel.from_pretrained(version, cache_dir=os.getcwd() + "/models")
+
+        self.tokenizer = CLIPTokenizer.from_pretrained(version)
+        self.transformer = CLIPTextModel.from_pretrained(version)
 
         # self.tokenizer.save_pretrained("/data1/wgyang/play/shenlan/CNSD/ControlNet_bk/models")
         # self.transformer.save_pretrained("/data1/wgyang/play/shenlan/CNSD/ControlNet_bk/models")

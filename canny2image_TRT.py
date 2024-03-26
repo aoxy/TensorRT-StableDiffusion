@@ -1,4 +1,4 @@
-from share import *
+from share_trt import *
 import config
 
 import cv2
@@ -19,11 +19,10 @@ class hackathon():
 
     def initialize(self):
         self.apply_canny = CannyDetector()
-        self.model = create_model('./models/cldm_v15.yaml').cpu()
+        self.model = create_model('./models/cldm_v15_trt.yaml').cpu()
         self.model.cond_stage_model.cuda()
         self.use_trt = True
-        # if not self.use_trt:
-        if 1:
+        if not self.use_trt:
             self.model.load_state_dict(load_state_dict('./models/control_sd15_canny.pth', location='cuda'))
             self.model = self.model.cuda()
 
